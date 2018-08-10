@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, User, UserManager
 # Create your models here.
 
 
@@ -9,9 +9,14 @@ class AccountManager(BaseUserManager):
             raise ValueError('Users must have a valid email address.')
         if not kwargs.get('username'):
             raise ValueError('Users must have a valid username.')
-        account = self.model(email=self.normalize_email(email), username=kwargs.get('username'))
+
+        account = self.model(
+            email=self.normalize_email(email), username=kwargs.get('username')
+        )
         account.set_password(password)
+        # print('pw', account.password)
         account.save()
+
         return account
 
     def create_superuser(self, email, password, **kwargs):
@@ -20,14 +25,21 @@ class AccountManager(BaseUserManager):
         account.save()
         return account
 
+
 class Account(AbstractUser):
+    # CHECK THIS OUT:
+    # https://stackoverflow.com/questions/10052220/advantages-to-using-urlfield-over-textfield
+    # https://stackoverflow.com/questions/34743482/how-to-separate-users-models-by-admins-and-customers-on-django
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=40, unique=True)
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
 
-    # admin_at = models.ManyToOneRel()
-    # owner_of = models.ManyToOneRel()
+    # role = models.CharField(blank=False, default='user')
+    is_admin = models.BooleanField(default=False)
+
+    bio = models.CharField(max_length=200, blank=True)
+    website_url = models.URLField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -45,3 +57,19 @@ class Account(AbstractUser):
 
     def get_short_name(self):
         return self.first_name
+
+# This can be used to separate our website administration classes and in-site channel admins
+# class Admin(User)
+
+
+class Channel(models.Model):
+    name = models.CharField(max_length=50, null=False)  # i.e. کانون هواداران اینترمیلان
+    channel_username = models.CharField(max_length=20, unique=True)  # i.e. inter_iran # Used to access channel
+
+    admins = models.ManyToManyField(Account, blank=True, related_name='admins')
+    owner = models.OneToOneField(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
+
+    def __unicode__(self):
+        return self.channel_username
+
+    # def save(self, *args, **kwargs):

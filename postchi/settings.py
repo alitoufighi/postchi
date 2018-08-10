@@ -120,3 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# We can set it as 'postchiapp.Admin' and create a new Administrator class which is completely different from
+# administrator of channels, etc.
+AUTH_USER_MODEL = 'postchiapp.Account'
