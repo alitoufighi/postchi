@@ -58,15 +58,12 @@ class Account(AbstractUser):
     def get_short_name(self):
         return self.first_name
 
-# This can be used to separate our website administration classes and in-site channel admins
-# class Admin(User)
-
 
 class Channel(models.Model):
     name = models.CharField(max_length=50, null=False)  # i.e. کانون هواداران اینترمیلان
     channel_username = models.CharField(max_length=20, unique=True)  # i.e. inter_iran # Used to access channel
 
-    admins = models.ManyToManyField(Account, blank=True, related_name='admins')
+    admin = models.ManyToManyField(Account, related_name='admins')
     owner = models.OneToOneField(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
 
     def __unicode__(self):

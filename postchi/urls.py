@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('postchiapp.urls')),
+    path('tg/', include('tg_handler.urls'))
 ]
