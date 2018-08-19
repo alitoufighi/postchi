@@ -158,3 +158,8 @@ STATIC_URL = '/static/'
 # We can set it as 'postchiapp.Admin' and create a new Administrator class which is completely different from
 # administrator of channels, etc.
 AUTH_USER_MODEL = 'postchiapp.Account'
+
+TWITTER_CONSUMER_KEY = 'YkbgnKkRGXuXaIO7QxM5QcHVB'
+TWITTER_CONSUMER_SECRET = 'XOYVldvUOnkSkrtFRUh6ixV4HANKfYKlYLIDnstSTreg7mOLQJ'
+
+TWITTER_CALLBACK_URL = 'HOSTNAME/tw/oauth/callback'

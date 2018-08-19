@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager, User, UserManager
+from postchiapp import utils
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 # Create your models here.
 
 
@@ -14,7 +15,6 @@ class AccountManager(BaseUserManager):
             email=self.normalize_email(email), username=kwargs.get('username')
         )
         account.set_password(password)
-        # print('pw', account.password)
         account.save()
 
         return account
@@ -35,7 +35,6 @@ class Account(AbstractUser):
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
 
-    # role = models.CharField(blank=False, default='user')
     is_admin = models.BooleanField(default=False)
 
     bio = models.CharField(max_length=200, blank=True)
@@ -63,10 +62,15 @@ class Channel(models.Model):
     name = models.CharField(max_length=50, null=False)  # i.e. کانون هواداران اینترمیلان
     channel_username = models.CharField(max_length=20, unique=True)  # i.e. inter_iran # Used to access channel
 
+    tg_token = models.CharField(max_length=100, unique=True, blank=True)  # Token given by @BotFather in Telegram
+
+    tw_token = models.CharField(max_length=100, unique=True, blank=True)  # Token given by our Twitter Application
+
+    in_username = models.CharField(max_length=100, unique=True, blank=True)  # Instagram username
+    in_password = models.CharField(max_length=100, blank=True)  # Instagram password (saved encrypted)
+
     admin = models.ManyToManyField(Account, related_name='admins')
     owner = models.OneToOneField(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
 
     def __unicode__(self):
         return self.channel_username
-
-    # def save(self, *args, **kwargs):
