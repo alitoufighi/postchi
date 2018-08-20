@@ -1,5 +1,5 @@
 from django.db import models
-from postchiapp import utils
+# from postchiapp import utils
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 # Create your models here.
 
@@ -59,18 +59,19 @@ class Account(AbstractUser):
 
 
 class Channel(models.Model):
-    name = models.CharField(max_length=50, null=False)  # i.e. کانون هواداران اینترمیلان
+    name = models.CharField(max_length=50, blank=False)  # i.e. کانون هواداران اینترمیلان
     channel_username = models.CharField(max_length=20, unique=True)  # i.e. inter_iran # Used to access channel
 
-    tg_token = models.CharField(max_length=100, unique=True, blank=True)  # Token given by @BotFather in Telegram
+    tg_token = models.CharField(max_length=100, blank=True)  # Token given by @BotFather in Telegram
+    #  TODO: WE NEED TO ALSO KNOW THAT THIS TELEGRAM BOT IS ADMIN OF WHAT CHANNEL!
 
-    tw_token = models.CharField(max_length=100, unique=True, blank=True)  # Token given by our Twitter Application
+    tw_token = models.CharField(max_length=100, blank=True)  # Token given by our Twitter Application
 
-    in_username = models.CharField(max_length=100, unique=True, blank=True)  # Instagram username
+    in_username = models.CharField(max_length=100, blank=True)  # Instagram username
     in_password = models.CharField(max_length=100, blank=True)  # Instagram password (saved encrypted)
 
-    admin = models.ManyToManyField(Account, related_name='admins')
-    owner = models.OneToOneField(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
+    admin = models.ManyToManyField(Account, related_name='admins', blank=True)
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
 
     def __unicode__(self):
         return self.channel_username

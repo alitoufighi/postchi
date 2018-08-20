@@ -10,7 +10,7 @@ class ChannelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Channel
-        fields = ('name', 'channel_username', 'owner')
+        fields = ('id', 'name', 'channel_username', 'owner', 'tg_token', 'tw_token', 'in_username')
 
 
 class AccountSerializer(serializers.ModelSerializer):

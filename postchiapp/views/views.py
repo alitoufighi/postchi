@@ -48,8 +48,10 @@ class ListMyChannels(APIView):
 
     def get(self, request):
         try:
-            channels = Channel.objects.filter(owner=request.user)
-            return Response(channels, status=status.HTTP_200_OK)
+            channels = list(Channel.objects.filter(owner=request.user))
+            serializer = ChannelSerializer(channels, many=True)
+            # print(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error:', e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
