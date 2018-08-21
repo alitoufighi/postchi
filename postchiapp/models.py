@@ -58,17 +58,40 @@ class Account(AbstractUser):
         return self.first_name
 
 
+# class Platform(models.Model):
+#     identifier = models.CharField()
+
+
+class TelegramPlatform(models.Model):
+    bot_token = models.CharField(max_length=100, blank=True)  # Token given by @BotFather in Telegram
+    chat_ids = models.ForeignKey(models.CharField, on_delete=models.CASCADE, blank=True, related_name='tg_chat_ids')
+
+
+class TwitterPlatform(models.Model):
+    access_token = models.CharField(max_length=100, blank=True)
+
+
+class InstagramPlatform(models.Model):
+    username = models.CharField(max_length=100, blank=True)  # Instagram username
+    password = models.CharField(max_length=100, blank=True)  # Instagram password ( saved encrypted ;) )
+
+
 class Channel(models.Model):
     name = models.CharField(max_length=50, blank=False)  # i.e. کانون هواداران اینترمیلان
     channel_username = models.CharField(max_length=20, unique=True)  # i.e. inter_iran # Used to access channel
 
-    tg_token = models.CharField(max_length=100, blank=True)  # Token given by @BotFather in Telegram
+    # tg_token = models.CharField(max_length=100, blank=True)  # Token given by @BotFather in Telegram
+    # tg_chat_id = models.ForeignKey(models.CharField, on_delete=models.CASCADE, null=True, related_name='tg_chat_ids')
+    #  Can be ForeignKey to CharField or either IntegerField, based on we accept personal ids or only channels.
     #  TODO: WE NEED TO ALSO KNOW THAT THIS TELEGRAM BOT IS ADMIN OF WHAT CHANNEL!
+    tg = models.ForeignKey(TelegramPlatform, on_delete=models.CASCADE, null=True)
 
-    tw_token = models.CharField(max_length=100, blank=True)  # Token given by our Twitter Application
+    # tw_token = models.CharField(max_length=100, blank=True)  # Token given by our Twitter Application
+    tw = models.ForeignKey(TwitterPlatform, on_delete=models.CASCADE, null=True)
 
-    in_username = models.CharField(max_length=100, blank=True)  # Instagram username
-    in_password = models.CharField(max_length=100, blank=True)  # Instagram password (saved encrypted)
+    # in_username = models.CharField(max_length=100, blank=True)  # Instagram username
+    # in_password = models.CharField(max_length=100, blank=True)  # Instagram password (saved encrypted)
+    insta = models.ForeignKey(InstagramPlatform, on_delete=models.CASCADE, null=True)
 
     admin = models.ManyToManyField(Account, related_name='admins', blank=True)
     owner = models.ForeignKey(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
