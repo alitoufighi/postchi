@@ -49,21 +49,21 @@ class ListMyChannels(APIView):
     def get(self, request):
         try:
             channels = list(Channel.objects.filter(owner=request.user))
+            if channels is None:
+                return Response(status=status.HTTP_404_NOT_FOUND)
             serializer = ChannelSerializer(channels, many=True)
-            # print(serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error:', e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@permission_classes((permissions.AllowAny,))
 def check_email_available(request):
     try:
-        req = request.POST
-        email = req['email']
+        email = request.data.get('email')
         duplicate_user = Account.objects.filter(email=email)
-        return duplicate_user is None
+        return len(duplicate_user) == 0
     except Exception as e:
         print('Error:', e)
         return False
-
