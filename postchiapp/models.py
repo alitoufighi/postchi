@@ -1,5 +1,8 @@
 from django.db import models
 # from postchiapp import utils
+# from model_utils import Choises
+#  TODO: install package model_utils
+from tg_handler.models import *
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 # Create your models here.
 
@@ -61,13 +64,27 @@ class Account(AbstractUser):
 # class Platform(models.Model):
 #     identifier = models.CharField()
 
+# class Post(models.Model):
+#     text = models.TextField()
+#     media = models.FileField()  # Assumption: We support only one media per each post
 
-class TelegramPlatform(models.Model):
-    bot_token = models.CharField(max_length=100, blank=True)  # Token given by @BotFather in Telegram
-    chat_ids = models.ForeignKey(models.CharField, on_delete=models.CASCADE, blank=True, related_name='tg_chat_ids')
+
+# class TelegramChatID(models.Model):
+#     TYPES = Choises(
+#         0, 'channel', _('channel'),
+#         1, 'user', _('user'),
+#         2, 'bot', _('bot'),
+#     )
+#
+#     chat_id = models.CharField()
+#     type = models.IntegerField(choices=TYPES, default=TYPES.channel)
+
+
+
 
 
 class TwitterPlatform(models.Model):
+    username = models.CharField(max_length=100, blank=True)  # For showing in profile?
     access_token = models.CharField(max_length=100, blank=True)
 
 
@@ -80,18 +97,20 @@ class Channel(models.Model):
     name = models.CharField(max_length=50, blank=False)  # i.e. کانون هواداران اینترمیلان
     channel_username = models.CharField(max_length=20, unique=True)  # i.e. inter_iran # Used to access channel
 
+    #  TODO: Supporting signs and default hashtags for posts!
+
     # tg_token = models.CharField(max_length=100, blank=True)  # Token given by @BotFather in Telegram
     # tg_chat_id = models.ForeignKey(models.CharField, on_delete=models.CASCADE, null=True, related_name='tg_chat_ids')
     #  Can be ForeignKey to CharField or either IntegerField, based on we accept personal ids or only channels.
     #  TODO: WE NEED TO ALSO KNOW THAT THIS TELEGRAM BOT IS ADMIN OF WHAT CHANNEL!
-    tg = models.ForeignKey(TelegramPlatform, on_delete=models.CASCADE, null=True)
+    tg = models.OneToOneField(TelegramPlatform, on_delete=models.CASCADE, null=True)
 
     # tw_token = models.CharField(max_length=100, blank=True)  # Token given by our Twitter Application
-    tw = models.ForeignKey(TwitterPlatform, on_delete=models.CASCADE, null=True)
+    tw = models.OneToOneField(TwitterPlatform, on_delete=models.CASCADE, null=True)
 
     # in_username = models.CharField(max_length=100, blank=True)  # Instagram username
     # in_password = models.CharField(max_length=100, blank=True)  # Instagram password (saved encrypted)
-    insta = models.ForeignKey(InstagramPlatform, on_delete=models.CASCADE, null=True)
+    insta = models.OneToOneField(InstagramPlatform, on_delete=models.CASCADE, null=True)
 
     admin = models.ManyToManyField(Account, related_name='admins', blank=True)
     owner = models.ForeignKey(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
