@@ -3,14 +3,17 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from postchiapp.models import Account
 from rest_framework.fields import CurrentUserDefault
+from tg_handler.serializers import TelegramPlatformSerializer
 
 
 class ChannelSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
+    # tg = TelegramPlatformSerializer()
+    # TODO: NESTED SERIALIZER?
 
     class Meta:
         model = Channel
-        fields = ('id', 'name', 'channel_username', 'owner', 'tg_token', 'tw_token', 'in_username')
+        fields = ('id', 'name', 'channel_username', 'owner', 'tg', 'tw', 'insta',)
 
 
 class AccountSerializer(serializers.ModelSerializer):
