@@ -9,19 +9,23 @@ from rest_framework.response import Response
 from postchiapp.serializers import *
 
 
-@api_view(['POST'])
-@permission_classes((permissions.IsAuthenticated,))
-@authentication_classes((authentication.JSONWebTokenAuthentication,))
-def add_telegram_channel(request):
-    channel_pk = request.data.get('channel_id', None)
-    token = request.data.get('tg_token', None)
-    if None in [channel_pk, token]:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    channel = Channel.objects.get(pk=channel_pk)
-    channel.tg_token = token
-    channel.save()
-    serializer = ChannelSerializer(channel)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+# @api_view(['POST'])
+# @permission_classes((permissions.IsAuthenticated,))
+# @authentication_classes((authentication.JSONWebTokenAuthentication,))
+# def add_telegram_channel(request):
+#     channel_pk = request.data.get('channel_id', None)
+#     token = request.data.get('tg_token', None)
+#     tg_cid = request.data.get('tg_cid', None)
+#     if None in [channel_pk, token, None]:
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+#     channel = Channel.objects.get(pk=channel_pk)
+#     # channel.tg.channel_id = tg_cid
+#     # channel.tg.bot_token = token
+#     #  TODO: HOW TO ACCESS FIELD IN A OneToOne RELATIONSHIP?
+#     # channel.save()
+#     serializer = ChannelSerializer(channel)
+#     print(serializer.data)
+#     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
