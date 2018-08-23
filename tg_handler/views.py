@@ -1,4 +1,4 @@
-from rest_framework.views import APIView
+# from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework_jwt import authentication
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -8,27 +8,19 @@ from postchiapp.serializers import ChannelSerializer
 from postchiapp.models import Channel
 
 
-def send_tg_message(request):
-    channel_pk = request.data.get('channel_id', None)
-    try:
-        channel = Channel.objects.get(pk=channel_pk)
-    except Channel.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    tg_token = channel.tg_token
-    text = request.data.get('text', None)
-    # media =
-    # parse_mode =
-    # Telegram.send_text(text)
-        # token = request.POST.get('tg_token', None)
-        # if token is not None:
-
-
-def get_channel(pk=None):
-    try:
-        channel = Channel.objects.get(pk=pk)
-    except Channel.DoesNotExist:
-        return None
-    return channel
+# def send_tg_message(request):
+#     channel_pk = request.data.get('channel_id', None)
+#     text = request.data.get('text', None)
+#     try:
+#         channel = Channel.objects.get(pk=channel_pk)
+#     except Channel.DoesNotExist:
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+#     tg_token = channel.tg_token
+#     media =
+#     parse_mode =
+#     Telegram.send_text(text)
+#     token = request.POST.get('tg_token', None)
+#     if token is not None:
 
 
 @api_view(['POST'])
@@ -49,8 +41,9 @@ def add_telegram_channel(request):
 
     if None in [channel_pk, token, tg_cid]:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    channel = Channel.objects.get(pk=channel_pk)
-    if channel is None:
+    try:
+        channel = Channel.objects.get(pk=channel_pk)
+    except Channel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     user = request.user
     if channel.owner != user:
@@ -58,10 +51,13 @@ def add_telegram_channel(request):
     if channel.tg is None:
         channel.tg = TelegramPlatform.objects.create(bot_token=token, chat_id=tg_cid)
         channel.tg.save()
-    #  TODO: HOW TO ACCESS FIELD IN A OneToOne RELATIONSHIP?
+    else:
+        pass
+        # TODO: Update a telegram channel? new view or editing this?
+        # channel.tg.bot_token =
+
     channel.save()
     serializer = ChannelSerializer(channel)
-    print(serializer.data)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -72,8 +68,9 @@ def view_telegram_channel(request):
     channel_pk = request.data.get('channel_id', None)
     if channel_pk is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    channel = get_channel(pk=channel_pk)
-    if channel is None:
+    try:
+        channel = Channel.objects.get(pk=channel_pk)
+    except Channel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     user = request.user
     if channel.owner != user:
@@ -89,8 +86,9 @@ def delete_telegram_channel(request):
     channel_pk = request.data.get('channel_id', None)
     if channel_pk is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    channel = get_channel(pk=channel_pk)
-    if channel is None:
+    try:
+        channel = Channel.objects.get(pk=channel_pk)
+    except Channel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     user = request.user
     if channel.owner != user:
