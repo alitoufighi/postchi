@@ -1,2 +1,1 @@
-# postchi
-
+Postchi is a platform for admins of social media pages, news agencies, fanpages, etc. whom want to share their news and posts in all their accounts in social media (Twitter, Instagram, Telegram, their Wordpress website, etc.). But copying files and changing apps may be bothering. So what about using one place to write posts, adjust them to your social media limits, editing photos or videos and adding watermarks to them, and everything you want as an admin of a channel.
