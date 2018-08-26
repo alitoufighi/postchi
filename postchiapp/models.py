@@ -4,6 +4,7 @@ from django.db import models
 #  TODO: install package model_utils
 from tg_handler.models import *
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from post import models as post
 # Create your models here.
 
 
@@ -97,6 +98,9 @@ class Channel(models.Model):
     photo = models.ImageField(null=True)
     about = models.TextField(null=True)
 
+    # posts = models.ForeignKey(post.Post, on_delete=models.CASCADE, null=True)
+
+    # favorite_hashtags = ?
     #  TODO: Supporting signs and default hashtags for posts!
 
     tg = models.OneToOneField(TelegramPlatform, on_delete=models.CASCADE, null=True)
@@ -105,7 +109,7 @@ class Channel(models.Model):
 
     insta = models.OneToOneField(InstagramPlatform, on_delete=models.CASCADE, null=True)
 
-    admin = models.ManyToManyField(Account, related_name='admins', blank=True)
+    admins = models.ManyToManyField(Account, related_name='admins', blank=True)
     owner = models.ForeignKey(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
 
     def __unicode__(self):
