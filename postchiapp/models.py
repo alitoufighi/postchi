@@ -4,7 +4,7 @@ from django.db import models
 #  TODO: install package model_utils
 from tg_handler.models import *
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from post import models as post
+# from post import models as post
 # Create your models here.
 
 
