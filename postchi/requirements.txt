@@ -1,2 +1,11 @@
 simple-crypt >
 model_utils
+django
+djangorestframework
+djangorestframework-jwt
+psycopg2
+tweepy
+pillow
+python-dotenv
+pathlib
+django-cors-headers

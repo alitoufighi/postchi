@@ -10,6 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+# FOT SETTING DOTENV
+# settings.py
+from dotenv import load_dotenv
+load_dotenv(verbose=True)
+from pathlib import Path  # python3 only
+env_path = Path('..') / '.env'
+load_dotenv(dotenv_path=env_path)
+# END
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -88,10 +97,10 @@ WSGI_APPLICATION = 'postchi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pstch_db',
-        'USER': 'postgres',
-        'PASSWORD': 'aliali',
-        'HOST': 'localhost',
+        'NAME': os.getenv("DB_URI"),
+        'USER': os.getenv("DB_USERNAME"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("HOST"),
         'PORT': '',
     }
 }
