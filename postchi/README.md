@@ -1,3 +1,5 @@
+** Setup on windows!
+
 > using Python 3.7!
 
 > Make sure you're using virtual env, for python version conflicts!
@@ -26,10 +28,10 @@ This will be fixed in the next version of tweepy, but currently, we need to do t
   Replace all
 
 > create .env file with the following info:
-  DB_USERNAME=Sahebi
-  DB_PASSWORD=***********
-  DB_URI=postchi
-  HOST=localhost
+  DB_USERNAME=<USERNAME>
+  DB_PASSWORD=<PASSWORD>
+  DB_URI=<DATABASENAME>
+  HOST=<USUALLYLOCALHOST>
 
 > python manage.py makemigrations <for_each_app>
   apps: postchiapp, tg_handler
