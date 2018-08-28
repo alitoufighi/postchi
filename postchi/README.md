@@ -20,12 +20,8 @@ https://stackoverflow.com/questions/24804829/no-module-named-winrandom-when-usin
 https://github.com/tweepy/tweepy/issues/1017  
 https://github.com/tweepy/tweepy/pull/1042 (see the file changes and change accordingly)  
 This will be fixed in the next version of tweepy, but currently, we need to do this manually!  
-  open <virtual-env-package-dir>\tweepy\streaming.py
-  in VS Code, Ctrl + R  
-  async  
-  Tab  
-  is_async  
-  Replace all  
+  open <virtual-env-package-dir>\tweepy\streaming.py  
+  repalce all 'async' words in the file with 'is_async' for example, just to avoid using the reserved word, as there would be errors!
 
 > create .env file with the following info (for the time being):  
   DB_USERNAME=  
