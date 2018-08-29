@@ -2,7 +2,7 @@ from django.db import models
 # from postchiapp import utils
 # from model_utils import Choises
 #  TODO: install package model_utils
-from tg_handler.models import *
+from tg_handler import models as tg
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 # from post import models as post
 # Create your models here.
@@ -103,11 +103,11 @@ class Channel(models.Model):
     # favorite_hashtags = ?
     #  TODO: Supporting signs and default hashtags for posts!
 
-    tg = models.OneToOneField(TelegramPlatform, on_delete=models.CASCADE, null=True)
+    tg = models.OneToOneField(tg.TelegramPlatform, on_delete=models.SET_NULL, null=True)
 
-    tw = models.OneToOneField(TwitterPlatform, on_delete=models.CASCADE, null=True)
+    tw = models.OneToOneField(TwitterPlatform, on_delete=models.SET_NULL, null=True)
 
-    insta = models.OneToOneField(InstagramPlatform, on_delete=models.CASCADE, null=True)
+    insta = models.OneToOneField(InstagramPlatform, on_delete=models.SET_NULL, null=True)
 
     admins = models.ManyToManyField(Account, related_name='admins', blank=True)
     owner = models.ForeignKey(Account, on_delete=models.CASCADE, editable=False, null=False, related_name='owner')
