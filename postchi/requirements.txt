@@ -1,4 +1,4 @@
-simple-crypt >
+simple-crypt
 model_utils
 django
 djangorestframework
