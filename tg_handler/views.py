@@ -93,6 +93,7 @@ def delete_telegram_channel(request):
     user = request.user
     if channel.owner != user:
         return Response(status=status.HTTP_403_FORBIDDEN)
+    channel.tg.delete()
     channel.tg = None
     channel.save()
     serializer = ChannelSerializer(channel)
