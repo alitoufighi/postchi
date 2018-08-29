@@ -10,13 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+# FOR JWT TIMEDELTA
+import datetime
+
 # FOT SETTING DOTENV
 # settings.py
 from dotenv import load_dotenv
-load_dotenv(verbose=True)
 from pathlib import Path  # python3 only
+load_dotenv(verbose=True)
 env_path = Path('..') / '.env'
-load_dotenv(dotenv_path=env_path)
+load_dotenv(dotenv_path=str(env_path))
 # END
 
 import os
@@ -142,8 +145,11 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
 )
 
+
+
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'postchiapp.utils.jwt_response_handler',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
 # Internationalization
