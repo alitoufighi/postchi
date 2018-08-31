@@ -63,7 +63,9 @@ def check_email_available(request):
     try:
         email = request.data.get('email')
         duplicate_user = Account.objects.filter(email=email)
-        return len(duplicate_user) == 0
+        if duplicate_user.exists():
+            return False
+        return True
     except Exception as e:
         print('Error:', e)
         return False

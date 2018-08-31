@@ -4,7 +4,6 @@ from django.db import models
 #  TODO: install package model_utils
 from tg_handler import models as tg
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-# from post import models as post
 # Create your models here.
 
 
@@ -98,7 +97,7 @@ class Channel(models.Model):
     photo = models.ImageField(null=True)
     about = models.TextField(null=True)
 
-    # posts = models.ForeignKey(post.Post, on_delete=models.CASCADE, null=True)
+    # posts = models.ForeignKey(post.Post, on_delete=models.SET_NULL, null=True)
 
     # favorite_hashtags = ?
     #  TODO: Supporting signs and default hashtags for posts!

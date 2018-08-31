@@ -5,7 +5,8 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.response import Response
 from tg_handler.serializers import *
 from postchiapp.serializers import ChannelSerializer
-from postchiapp.models import Channel
+# from postchiapp.models import Channel
+from postchiapp.permissions import *
 
 
 # def send_tg_message(request):
@@ -24,7 +25,7 @@ from postchiapp.models import Channel
 
 
 @api_view(['POST'])
-@permission_classes((permissions.IsAuthenticated,))
+@permission_classes((IsChannelOwner,))
 @authentication_classes((authentication.JSONWebTokenAuthentication,))
 def add_telegram_channel(request):
     """
@@ -32,7 +33,7 @@ def add_telegram_channel(request):
     """
     channel_pk = request.data.get('channel_id', None)
     token = request.data.get('tg_token', None)
-    tg_cid = request.data.get('tg_cid', None)  # username of channel or chat_id of it ( TODO: which one?)
+    tg_cid = request.data.get('tg_cid', None)  # username of channel or chat_id of it (TODO: which one?)
 
     # is_admin = test_bot(token, tg_cid)
     # TODO: implement test_bot() to check if bot is admin in that telegram channel or not
@@ -45,9 +46,6 @@ def add_telegram_channel(request):
         channel = Channel.objects.get(pk=channel_pk)
     except Channel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    user = request.user
-    if channel.owner != user:
-        return Response(status=status.HTTP_403_FORBIDDEN)
     if channel.tg is None:
         channel.tg = TelegramPlatform.objects.create(bot_token=token, chat_id=tg_cid)
         channel.tg.save()
@@ -62,7 +60,7 @@ def add_telegram_channel(request):
 
 
 @api_view(['POST'])
-@permission_classes((permissions.IsAuthenticated,))
+@permission_classes((IsChannelOwner,))
 @authentication_classes((authentication.JSONWebTokenAuthentication,))
 def view_telegram_channel(request):
     channel_pk = request.data.get('channel_id', None)
@@ -72,15 +70,13 @@ def view_telegram_channel(request):
         channel = Channel.objects.get(pk=channel_pk)
     except Channel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    user = request.user
-    if channel.owner != user:
-        return Response(status=status.HTTP_403_FORBIDDEN)
     serializer = TelegramPlatformSerializer(channel.tg)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
-@permission_classes((permissions.IsAuthenticated,))
+@permission_classes((IsChannelOwner,))  # CHECK IT AGAIN!
+# TODO: it works with correct channel_pk and returns 403, but it gives access to view when channel_pk is not correct (if `channel` returns None)
 @authentication_classes((authentication.JSONWebTokenAuthentication,))
 def delete_telegram_channel(request):
     channel_pk = request.data.get('channel_id', None)
@@ -90,10 +86,8 @@ def delete_telegram_channel(request):
         channel = Channel.objects.get(pk=channel_pk)
     except Channel.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    user = request.user
-    if channel.owner != user:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    channel.tg.delete()
+    if channel.tg is not None:
+        channel.tg.delete()
     channel.tg = None
     channel.save()
     serializer = ChannelSerializer(channel)

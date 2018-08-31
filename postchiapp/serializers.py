@@ -26,6 +26,7 @@ class AccountSerializerWithToken(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)  # WHY TO WE NEED THIS?
 
+    # noinspection PyMethodMayBeStatic
     def get_token(self, obj):
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER

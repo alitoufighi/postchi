@@ -1,4 +1,4 @@
-from postchiapp.serializers import AccountSerializer
+# from postchiapp.serializers import AccountSerializer
 from postchi import settings
 from simplecrypt import encrypt, decrypt
 
@@ -26,5 +26,5 @@ class SecurePassword:
 def jwt_response_handler(token, user=None, request=None):
     return {
         'token': token,
-        'user': AccountSerializer(user, context={'request': request}).data,
+        # 'user': AccountSerializer(user, context={'request': request}).data,
     }

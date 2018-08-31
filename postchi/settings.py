@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'postchiapp',
+    'post',
     'tg_handler',
 ]
 
@@ -144,7 +145,6 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
 )
-
 
 
 JWT_AUTH = {

@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tg/', include('tg_handler.urls')),
     path('', include('postchiapp.urls')),
+    path('post/', include('post.urls')),
 ]
