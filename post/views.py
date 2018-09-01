@@ -30,3 +30,14 @@ def add_post(request):
 
     return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
+
+@api_view(['POST'])
+@permission_classes((IsChannelAdmin,))
+@authentication_classes((authentication.JSONWebTokenAuthentication,))
+def view_posts(request):
+    channel_id = request.data.get('channel', None)
+    posts = Post.objects.filter(channel=channel_id)
+    serializer = PostViewSerializer(posts, many=True)
+    # if serializer.is_valid():
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+    # return Response(status=status.HTTP_400_BAD_REQUEST)
