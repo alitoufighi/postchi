@@ -1,10 +1,11 @@
 from django.db import models
 from postchiapp import models as core
+from post.utils import user_directory_path
 
 
 class Post(models.Model):
     text = models.TextField(max_length=700, blank=True)
-    media = models.FileField(null=True)
+    media = models.FileField(upload_to=user_directory_path, null=True)
 
     channel = models.ForeignKey(core.Channel, on_delete=models.CASCADE, null=True)  # WHAT TO DO WITH null=True?
     author = models.ForeignKey(core.Account, on_delete=models.DO_NOTHING, null=True)  # CHECK DO_NOTHING
