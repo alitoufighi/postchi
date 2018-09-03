@@ -2,6 +2,7 @@
 *.pyc
 *~
 __pycache__
+media/
 myvenv
 db.sqlite3
 /static
@@ -9,3 +10,14 @@ db.sqlite3
 migrations
 /.vscode
 .env
+bin/
+include/
+lib/
+pip-selfcheck.json
+post/utils.py
+postchi/bin/
+postchi/lib/
+postchi/lib64
+postchi/pip-selfcheck.json
+postchi/pyvenv.cfg
+postchi/share/
