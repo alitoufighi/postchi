@@ -14,7 +14,6 @@ bin/
 include/
 lib/
 pip-selfcheck.json
-post/utils.py
 postchi/bin/
 postchi/lib/
 postchi/lib64
