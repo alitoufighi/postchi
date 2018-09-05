@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
+import os
 
 # FOR JWT TIMEDELTA
 import datetime
@@ -22,7 +23,6 @@ env_path = Path('..') / '.env'
 load_dotenv(dotenv_path=str(env_path))
 # END
 
-import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,7 +37,7 @@ SECRET_KEY = 'a2-6%(brq1ll(ru_+olfp%pdu8*+ag@r#e-@mf6h@wvrt--n#@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['alitou.pythonanywhere.com']
 
 
 # Application definition
@@ -129,6 +129,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
@@ -149,7 +153,7 @@ CORS_ORIGIN_WHITELIST = (
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'postchiapp.utils.jwt_response_handler',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),  # ALLOW USER TO BE LOGGED IN FOR ONE WEEK
 }
 
 # Internationalization
@@ -170,7 +174,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = ''
+STATICFILES_DIRS = ( os.path.join('static'), )
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
+MEDIA_URL = '/media/'
 # We can set it as 'postchiapp.Admin' and create a new Administrator class which is completely different from
 # administrator of channels, etc.
 AUTH_USER_MODEL = 'postchiapp.Account'
