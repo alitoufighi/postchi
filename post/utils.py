@@ -40,7 +40,6 @@ def send_tg_message(text, token, chat_id, media=None):  # TODO: `media` is file_
             url='{0}{1}/{2}'.format(TELEGRAM_BASE_URL, token, method),
             data={'chat_id': '@{0}'.format(id), 'text': text, 'parse_mode': 'markdown'}).json()
 
-    print('+-+', text, token, chat_id, media)
     return response
 
 

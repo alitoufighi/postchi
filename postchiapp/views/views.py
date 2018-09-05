@@ -12,7 +12,6 @@ class AccountSignup(APIView):
     def post(self, request):
         account = AccountSerializerWithToken(data=request.data)
         if account.is_valid():
-            print(account)
             account.save()
             return Response(account.data, status=status.HTTP_201_CREATED)
         return Response(account.errors, status=status.HTTP_400_BAD_REQUEST)

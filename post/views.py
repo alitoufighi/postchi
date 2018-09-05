@@ -23,7 +23,6 @@ class AddPost(APIView):
 
     def post(self, request):  # used to post without media
         platforms = get_platforms(request)
-        print('+', platforms)
         channel_id = request.data.get('channel', None)
         text = request.data.get('text', None)
         if None in [text, channel_id]:
@@ -38,7 +37,6 @@ class AddPost(APIView):
         if post.is_valid():
             try:
                 for platform in platforms:
-                    print('+ posting...')
                     send_message(text, channel, platform)
             except ...:
                 pass
@@ -48,10 +46,8 @@ class AddPost(APIView):
 
     def put(self, request):  # used to post with media
         platforms = get_platforms(request)
-        print('+', platforms)
         channel_id = request.data.get('channel', None)
         text = request.data.get('text', None)
-        # media = request.FILES.get('media', None)
 
         if None in [text, channel_id]:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -63,7 +59,7 @@ class AddPost(APIView):
 
         if post.is_valid():
             post.save()
-            media_link = post.data.get('media')
+            media_link = post.data.get('media', None)
             try:
                 for platform in platforms:
                     pass
