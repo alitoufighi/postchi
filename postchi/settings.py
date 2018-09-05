@@ -16,11 +16,11 @@ import datetime
 
 # FOT SETTING DOTENV
 # settings.py
-from dotenv import load_dotenv
-from pathlib import Path  # python3 only
-load_dotenv(verbose=True)
-env_path = Path('..') / '.env'
-load_dotenv(dotenv_path=str(env_path))
+# from dotenv import load_dotenv
+# from pathlib import Path  # python3 only
+# load_dotenv(verbose=True)
+# env_path = Path('..') / '.env'
+# load_dotenv(dotenv_path=str(env_path))
 # END
 
 
