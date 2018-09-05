@@ -20,9 +20,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('tg/', include('tg_handler.urls')),
-    path('', include('postchiapp.urls')),
-    path('post/', include('post.urls')),
+    path('api/tg/', include('tg_handler.urls')),
+    path('api/auth/', include('postchiapp.urls')),
+    path('api/post/', include('post.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # for media files
