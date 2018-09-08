@@ -32,7 +32,7 @@ def send_tg_message(text, token, chat_id, media=None):  # TODO: `media` is file_
         response = requests.post(
             url='{0}{1}/{2}'.format(TELEGRAM_BASE_URL, token, method),
             data={'chat_id': '@{0}'.format(chat_id), 'caption': text},
-            files={'photo': open(media, 'rb'), }).json()
+            files={'photo': media}).json()
     else:
         text = '[​​​​​​​​​​​]({0}){1}'.format(media, text)
         method = 'sendMessage'
