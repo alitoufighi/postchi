@@ -14,18 +14,19 @@ import os
 # FOR JWT TIMEDELTA
 import datetime
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # FOT SETTING DOTENV
 # settings.py
-# from dotenv import load_dotenv
-# from pathlib import Path  # python3 only
-# load_dotenv(verbose=True)
-# env_path = Path('..') / '.env'
-# load_dotenv(dotenv_path=str(env_path))
+from dotenv import load_dotenv
+from pathlib import Path  # python3 only
+load_dotenv(verbose=True)
+env_path = Path('..') / '.env'
+load_dotenv(dotenv_path=str(env_path))
 # END
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -91,23 +92,24 @@ WSGI_APPLICATION = 'postchi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if os.getenv('DB_TYPE') == 'SQLITE':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv("DB_URI"),
-#         'USER': os.getenv("DB_USERNAME"),
-#         'PASSWORD': os.getenv("DB_PASSWORD"),
-#         'HOST': os.getenv("HOST"),
-#         'PORT': '',
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DB_URI"),
+            'USER': os.getenv("DB_USERNAME"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': os.getenv("HOST"),
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -145,6 +147,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    # 'DEFAULT_VERSIONING_CLASS': (
+    #     'rest_framework.versioning.NamespaceVersioning',
+    # )
 }
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
