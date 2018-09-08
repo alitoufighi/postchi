@@ -35,12 +35,13 @@ class AddPost(APIView):
         post = PostCreateSerializer(data=request.data, context={'request': request})
 
         if post.is_valid():
+            post.save()
             try:
                 for platform in platforms:
-                    send_message(text, channel, platform)
+                    print('+', platform)
+                    send_message(text, channel, platform, post)
             except ...:
                 pass
-            post.save()
             return Response(post.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -62,12 +63,10 @@ class AddPost(APIView):
             media_link = post.data.get('media', None)
             try:
                 for platform in platforms:
-                    pass
-                    send_message(text, channel, platform, media_link)
+                    print('+', platform)
+                    send_message(text, channel, platform, post, media_link)
             except ...:
                 pass
-
-
 
             return Response(post.data, status=status.HTTP_201_CREATED)
 
