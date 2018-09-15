@@ -25,38 +25,6 @@ def get_current_user(request):
     return Response(account.data)
 
 
-class CreateChannel(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (authentication.JSONWebTokenAuthentication,)
-
-    def post(self, request):
-        try:
-            channel = ChannelSerializer(data=request.data, context={'request': request})
-            if channel.is_valid():
-                channel.save()
-                return Response(channel.data, status=status.HTTP_201_CREATED)
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        except Exception as e:
-            print('Error:', e)
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class ListMyChannels(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (authentication.JSONWebTokenAuthentication,)
-
-    def get(self, request):
-        try:
-            channels = list(Channel.objects.filter(owner=request.user))
-            if channels is None:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            serializer = ChannelSerializer(channels, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            print('Error:', e)
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 @permission_classes((permissions.AllowAny,))
 def check_email_available(request):
     try:
