@@ -38,7 +38,7 @@ SECRET_KEY = 'a2-6%(brq1ll(ru_+olfp%pdu8*+ag@r#e-@mf6h@wvrt--n#@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['alitou.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'alitou.pythonanywhere.com']
 
 
 # Application definition
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'postchiapp',
     'post',
+    'channel',
     'tg_handler',
 ]
 
@@ -108,6 +109,9 @@ else:
             'PASSWORD': os.getenv("DB_PASSWORD"),
             'HOST': os.getenv("HOST"),
             'PORT': '',
+            'TEST': {
+                'NAME': 'test_db',
+            },
         }
     }
 
@@ -173,6 +177,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+
+DEFAULT_PROTOCOL = 'http'
 
 
 # Static files (CSS, JavaScript, Images)
