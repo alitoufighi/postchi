@@ -40,8 +40,9 @@ class AddPost(APIView):
                 for platform in platforms:
                     print('+', platform)
                     send_message(text, channel, platform, post)
-            except ...:
-                pass
+            except Exception as e:
+                print('Error in AddPost view:', e)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             return Response(post.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -56,47 +57,21 @@ class AddPost(APIView):
             channel = Channel.objects.get(pk=channel_id)
         except Channel.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        post = PostCreateSerializer(data=request.data, context={'request': request})
+        serializer = PostCreateSerializer(data=request.data, context={'request': request})
 
-        if post.is_valid():
-            post.save()
-            media_link = post.data.get('media', None)
+        if serializer.is_valid():
+            post_instance = serializer.save()
+            media_url = get_media_uri(relative_url=str(post_instance.media), host=request.get_host())
+            media_relative_path = url_to_path(media_url, get_domain_url(request.get_host()))
             try:
                 for platform in platforms:
-                    print('+', platform)
-                    send_message(text, channel, platform, post, media_link)
-            except ...:
-                pass
-
-            return Response(post.data, status=status.HTTP_201_CREATED)
-
-# def add_post(request):
-#
-#     content_type = request.META.get('CONTENT_TYPE', request.META.get('HTTP_ACCEPT', None))
-#     platforms = get_platforms(request)
-#
-#     channel_id = request.data.get('channel', None)
-#     text = request.data.get('text', None)
-#
-#     if None in [text, channel_id]:
-#         return Response(status=status.HTTP_400_BAD_REQUEST)
-#
-#     if not Channel.objects.filter(pk=channel_id).exists():
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-#
-#     post = PostSerializer(data=request.data, files=request.FILES, context={'request': request})
-#
-#     if post.is_valid():
-#         post.save()
-#         return Response(post.data, status=status.HTTP_201_CREATED)
-#
-#
-#     if content_type == JSON_CONTENT_TYPE:  # if post without media
-#         pass
-#     elif MULTIPART_CONTENT_TYPE in content_type:  # if posted with media
-#         media = request.FILES.get('media', None)
-#
-#     return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+                    send_message(text, channel, platform, post_instance, media_url, media_relative_path)
+            except Exception as e:
+                print('Error in AddPost view:', e)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            serializer = PostListSerializer(post_instance)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
