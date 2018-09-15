@@ -14,7 +14,10 @@ class IsChannelAdmin(BasePermission):
         channel_pk = request.data.get('channel') if 'channel' in request.data else request.data.get('channel_id', None)
         if channel_pk is None:
             return False
-        channel = Channel.objects.get(pk=channel_pk)
+        try:
+            channel = Channel.objects.get(pk=channel_pk)
+        except Exception:
+            return False
         channel_admins = [channel.admins.all(), channel.owner]
         return request.user in channel_admins
 
@@ -24,5 +27,8 @@ class IsChannelOwner(BasePermission):
         channel_pk = request.data.get('channel') if 'channel' in request.data else request.data.get('channel_id', None)
         if channel_pk is None:
             return False
-        channel = Channel.objects.get(pk=channel_pk)
+        try:
+            channel = Channel.objects.get(pk=channel_pk)
+        except Exception:
+            return False
         return request.user == channel.owner
